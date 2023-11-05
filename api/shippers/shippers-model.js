@@ -24,14 +24,24 @@ async function getById(shipperId) {
 async function create(shipper) {
   const [shipperId] = await db('shippers')
     .insert(shipper);
+
   const result = await getById(shipperId);
   return result
 }
 
-async function update() {
-  return 'update wired'
+async function update(shipperId, changes) {
+  await db('shippers')
+    .update(changes)
+    .where('shipperId', shipperId)
+
+  const result = getById(shipperId)
+  return result
 }
 
-async function remove() {
-  return 'delete wired'
+async function remove(shipperId) {
+  const tobeDeleted = await getById (shipperId)
+  await db('shippers')
+    .del()
+    .where('shipperid', shipperId)
+  return tobeDeleted
 }
